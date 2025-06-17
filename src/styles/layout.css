@@ -1,0 +1,57 @@
+/* Main layout structure */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Fixed header */
+.app-header {
+  flex: 0 0 auto;
+  width: 100%;
+  background: #fff;
+  z-index: 1000;
+}
+
+/* Scrollable content area */
+.app-content {
+  flex: 1;
+  overflow-y: scroll; /* Always show scrollbar */
+  overflow-x: hidden;
+  position: relative;
+  scrollbar-gutter: stable; /* Reserve space for the scrollbar */
+}
+
+/* Content container */
+.content-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+/* Custom scrollbar styles */
+.app-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.app-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.app-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.app-content::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Firefox scrollbar styles */
+.app-content {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+} 
