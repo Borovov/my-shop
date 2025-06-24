@@ -19,13 +19,13 @@ const LoginPage: React.FC = () => {
     const newErrors: ValidationErrors = {};
 
     if (!formData.email) {
-      newErrors.email = 'Email обязателен';
+      newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Некорректный email адрес';
+      newErrors.email = 'Invalid email address';
     }
 
     if (!formData.password) {
-      newErrors.password = 'Пароль обязателен';
+      newErrors.password = 'Password is required';
     }
 
     setErrors(newErrors);
@@ -40,11 +40,11 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
     try {
       await login(formData);
-      setToast({ message: 'Вход выполнен успешно!', type: 'success' });
+      setToast({ message: 'Login successful!', type: 'success' });
       setTimeout(() => navigate('/'), 1500); // Redirect after showing success message
     } catch (error) {
       setToast({ 
-        message: error instanceof Error ? error.message : 'Ошибка входа', 
+        message: error instanceof Error ? error.message : 'Login error', 
         type: 'error' 
       });
     } finally {
@@ -67,7 +67,7 @@ const LoginPage: React.FC = () => {
         <div className="col-12 col-md-8 col-lg-6">
           <div className="card shadow-sm">
             <div className="card-body p-4">
-              <h1 className="text-center mb-4">Вход</h1>
+              <h1 className="text-center mb-4">Login</h1>
               <form onSubmit={handleSubmit} noValidate>
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">Email</label>
@@ -87,7 +87,7 @@ const LoginPage: React.FC = () => {
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Пароль</label>
+                  <label htmlFor="password" className="form-label">Password</label>
                   <input
                     type="password"
                     className={`form-control ${errors.password ? 'is-invalid' : ''}`}
@@ -111,18 +111,18 @@ const LoginPage: React.FC = () => {
                   {isLoading ? (
                     <>
                       <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                      Выполняется вход...
+                      Logging in...
                     </>
                   ) : (
-                    'Войти'
+                    'Login'
                   )}
                 </button>
 
                 <div className="text-center">
                   <p className="mb-0">
-                    Нет аккаунта? {' '}
+                    Don't have an account? {' '}
                     <Link to="/register" className="text-primary text-decoration-none">
-                      Зарегистрироваться
+                      Sign up
                     </Link>
                   </p>
                 </div>

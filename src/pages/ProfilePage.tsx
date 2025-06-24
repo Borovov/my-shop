@@ -26,11 +26,11 @@ const AddressForm: React.FC<{
       <div className="card-body">
         <div className="d-flex justify-content-between align-items-start mb-3">
           <h6 className="card-subtitle text-muted">
-            Адрес {address.id}
+            Address {address.id}
           </h6>
           <div className="d-flex align-items-center gap-2">
             {address.isDefault && (
-              <span className="badge bg-primary">Основной адрес</span>
+              <span className="badge bg-primary">Default Address</span>
             )}
             <div className="btn-group">
               {!address.isDefault && (
@@ -40,7 +40,7 @@ const AddressForm: React.FC<{
                   onClick={() => onSetDefault(address.id)}
                   disabled={isLoading}
                 >
-                  Сделать основным
+                  Set as Default
                 </button>
               )}
               {!address.isDefault && (
@@ -50,7 +50,7 @@ const AddressForm: React.FC<{
                   onClick={() => onDelete(address.id)}
                   disabled={isLoading}
                 >
-                  Удалить
+                  Delete
                 </button>
               )}
             </div>
@@ -58,7 +58,7 @@ const AddressForm: React.FC<{
         </div>
 
         <div className="mb-3">
-          <label htmlFor={`street-${address.id}`} className="form-label">Улица</label>
+          <label htmlFor={`street-${address.id}`} className="form-label">Street</label>
           <input
             type="text"
             className={`form-control ${errors[`address.${address.id}.street`] ? 'is-invalid' : ''}`}
@@ -75,7 +75,7 @@ const AddressForm: React.FC<{
 
         <div className="row">
           <div className="col-md-6 mb-3">
-            <label htmlFor={`city-${address.id}`} className="form-label">Город</label>
+            <label htmlFor={`city-${address.id}`} className="form-label">City</label>
             <input
               type="text"
               className={`form-control ${errors[`address.${address.id}.city`] ? 'is-invalid' : ''}`}
@@ -91,7 +91,7 @@ const AddressForm: React.FC<{
           </div>
 
           <div className="col-md-6 mb-3">
-            <label htmlFor={`state-${address.id}`} className="form-label">Область/Регион</label>
+            <label htmlFor={`state-${address.id}`} className="form-label">State/Region</label>
             <input
               type="text"
               className="form-control"
@@ -106,7 +106,7 @@ const AddressForm: React.FC<{
 
         <div className="row">
           <div className="col-md-6 mb-3">
-            <label htmlFor={`country-${address.id}`} className="form-label">Страна</label>
+            <label htmlFor={`country-${address.id}`} className="form-label">Country</label>
             <input
               type="text"
               className={`form-control ${errors[`address.${address.id}.country`] ? 'is-invalid' : ''}`}
@@ -122,7 +122,7 @@ const AddressForm: React.FC<{
           </div>
 
           <div className="col-md-6 mb-3">
-            <label htmlFor={`zipCode-${address.id}`} className="form-label">Почтовый индекс</label>
+            <label htmlFor={`zipCode-${address.id}`} className="form-label">ZIP Code</label>
             <input
               type="text"
               className={`form-control ${errors[`address.${address.id}.zipCode`] ? 'is-invalid' : ''}`}
@@ -177,25 +177,25 @@ const ProfilePage: React.FC = () => {
     const newErrors: ValidationErrors = {};
 
     if (!formData.name?.trim()) {
-      newErrors.name = 'Имя обязательно';
+      newErrors.name = 'Name is required';
     }
 
     if (formData.phone && !/^\+?[\d\s-()]+$/.test(formData.phone)) {
-      newErrors.phone = 'Некорректный формат телефона';
+      newErrors.phone = 'Invalid phone format';
     }
 
     formData.addresses?.forEach(address => {
       if (!address.street?.trim()) {
-        newErrors[`address.${address.id}.street`] = 'Улица обязательна';
+        newErrors[`address.${address.id}.street`] = 'Street is required';
       }
       if (!address.city?.trim()) {
-        newErrors[`address.${address.id}.city`] = 'Город обязателен';
+        newErrors[`address.${address.id}.city`] = 'City is required';
       }
       if (!address.country?.trim()) {
-        newErrors[`address.${address.id}.country`] = 'Страна обязательна';
+        newErrors[`address.${address.id}.country`] = 'Country is required';
       }
       if (!address.zipCode?.trim()) {
-        newErrors[`address.${address.id}.zipCode`] = 'Почтовый индекс обязателен';
+        newErrors[`address.${address.id}.zipCode`] = 'ZIP code is required';
       }
     });
 
@@ -211,11 +211,11 @@ const ProfilePage: React.FC = () => {
     setIsLoading(true);
     try {
       await updateProfile(formData);
-      setToast({ message: 'Профиль успешно обновлен', type: 'success' });
+      setToast({ message: 'Profile updated successfully', type: 'success' });
       setIsEditing(false);
     } catch (error) {
       setToast({ 
-        message: error instanceof Error ? error.message : 'Ошибка обновления профиля', 
+        message: error instanceof Error ? error.message : 'Error updating profile', 
         type: 'error' 
       });
     } finally {
@@ -327,13 +327,13 @@ const ProfilePage: React.FC = () => {
                 style={{ width: '150px', height: '150px' }}
               />
               <h5 className="card-title mb-0">{user.name}</h5>
-              <p className="text-muted">{user.role === 'admin' ? 'Администратор' : 'Пользователь'}</p>
+              <p className="text-muted">{user.role === 'admin' ? 'Administrator' : 'User'}</p>
               <button
                 className="btn btn-primary"
                 onClick={() => setIsEditing(!isEditing)}
                 disabled={isLoading}
               >
-                {isEditing ? 'Отменить' : 'Редактировать профиль'}
+                {isEditing ? 'Cancel' : 'Edit Profile'}
               </button>
             </div>
           </div>
@@ -344,16 +344,16 @@ const ProfilePage: React.FC = () => {
           <div className="card">
             <div className="card-body">
               <h4 className="card-title mb-4">
-                {isEditing ? 'Редактирование профиля' : 'Информация профиля'}
+                {isEditing ? 'Edit Profile' : 'Profile Information'}
               </h4>
 
               {isEditing ? (
                 <form onSubmit={handleSubmit}>
                   {/* Основная информация */}
                   <div className="mb-4">
-                    <h5 className="mb-3">Основная информация</h5>
+                    <h5 className="mb-3">Basic Information</h5>
                     <div className="mb-3">
-                      <label htmlFor="name" className="form-label">Имя</label>
+                      <label htmlFor="name" className="form-label">Name</label>
                       <input
                         type="text"
                         className={`form-control ${errors.name ? 'is-invalid' : ''}`}
@@ -377,11 +377,11 @@ const ProfilePage: React.FC = () => {
                         value={user.email}
                         disabled
                       />
-                      <small className="text-muted">Email нельзя изменить</small>
+                      <small className="text-muted">Email cannot be changed</small>
                     </div>
 
                     <div className="mb-3">
-                      <label htmlFor="phone" className="form-label">Телефон</label>
+                      <label htmlFor="phone" className="form-label">Phone</label>
                       <input
                         type="tel"
                         className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
@@ -400,7 +400,7 @@ const ProfilePage: React.FC = () => {
                   {/* Адреса */}
                   <div className="mb-4">
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                      <h5 className="mb-0">Адреса доставки</h5>
+                      <h5 className="mb-0">Delivery Addresses</h5>
                       <button
                         type="button"
                         className="btn btn-outline-primary btn-sm"
@@ -408,7 +408,7 @@ const ProfilePage: React.FC = () => {
                         disabled={isLoading}
                       >
                         <i className="bi bi-plus-lg me-1"></i>
-                        Добавить адрес
+                        Add Address
                       </button>
                     </div>
 
@@ -427,7 +427,7 @@ const ProfilePage: React.FC = () => {
 
                   {/* Настройки */}
                   <div className="mb-4">
-                    <h5 className="mb-3">Настройки</h5>
+                    <h5 className="mb-3">Settings</h5>
                     <div className="mb-3">
                       <div className="form-check">
                         <input
@@ -440,13 +440,13 @@ const ProfilePage: React.FC = () => {
                           disabled={isLoading}
                         />
                         <label className="form-check-label" htmlFor="preferences.newsletter">
-                          Подписаться на новостную рассылку
+                          Subscribe to newsletter
                         </label>
                       </div>
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label d-block">Уведомления</label>
+                      <label className="form-label d-block">Notifications</label>
                       <div className="form-check">
                         <input
                           type="checkbox"
@@ -458,7 +458,7 @@ const ProfilePage: React.FC = () => {
                           disabled={isLoading}
                         />
                         <label className="form-check-label" htmlFor="preferences.notifications.email">
-                          Email уведомления
+                          Email notifications
                         </label>
                       </div>
                       <div className="form-check">
@@ -472,7 +472,7 @@ const ProfilePage: React.FC = () => {
                           disabled={isLoading}
                         />
                         <label className="form-check-label" htmlFor="preferences.notifications.push">
-                          Push уведомления
+                          Push notifications
                         </label>
                       </div>
                     </div>
@@ -487,10 +487,10 @@ const ProfilePage: React.FC = () => {
                       {isLoading ? (
                         <>
                           <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                          Сохранение...
+                          Saving...
                         </>
                       ) : (
-                        'Сохранить изменения'
+                        'Save Changes'
                       )}
                     </button>
                     <button
@@ -499,7 +499,7 @@ const ProfilePage: React.FC = () => {
                       onClick={() => setIsEditing(false)}
                       disabled={isLoading}
                     >
-                      Отмена
+                      Cancel
                     </button>
                   </div>
                 </form>
@@ -507,47 +507,47 @@ const ProfilePage: React.FC = () => {
                 <>
                   {/* Основная информация */}
                   <div className="mb-4">
-                    <h5 className="mb-3">Основная информация</h5>
+                    <h5 className="mb-3">Basic Information</h5>
                     <dl className="row mb-0">
-                      <dt className="col-sm-3">Имя</dt>
+                      <dt className="col-sm-3">Name</dt>
                       <dd className="col-sm-9">{user.name}</dd>
 
                       <dt className="col-sm-3">Email</dt>
                       <dd className="col-sm-9">{user.email}</dd>
 
-                      <dt className="col-sm-3">Телефон</dt>
-                      <dd className="col-sm-9">{user.phone || 'Не указан'}</dd>
+                      <dt className="col-sm-3">Phone</dt>
+                      <dd className="col-sm-9">{user.phone || 'Not specified'}</dd>
                     </dl>
                   </div>
 
                   {/* Адреса */}
                   <div className="mb-4">
-                    <h5 className="mb-3">Адреса доставки</h5>
+                    <h5 className="mb-3">Delivery Addresses</h5>
                     {user.addresses.map(address => (
                       <div key={address.id} className="card mb-3">
                         <div className="card-body">
                           <div className="d-flex justify-content-between align-items-center mb-2">
                             <h6 className="card-subtitle text-muted mb-0">
-                              Адрес {address.id}
+                              Address {address.id}
                             </h6>
                             {address.isDefault && (
-                              <span className="badge bg-primary">Основной адрес</span>
+                              <span className="badge bg-primary">Default Address</span>
                             )}
                           </div>
                           <dl className="row mb-0">
-                            <dt className="col-sm-3">Улица</dt>
+                            <dt className="col-sm-3">Street</dt>
                             <dd className="col-sm-9">{address.street}</dd>
 
-                            <dt className="col-sm-3">Город</dt>
+                            <dt className="col-sm-3">City</dt>
                             <dd className="col-sm-9">{address.city}</dd>
 
-                            <dt className="col-sm-3">Область/Регион</dt>
-                            <dd className="col-sm-9">{address.state || 'Не указан'}</dd>
+                            <dt className="col-sm-3">State/Region</dt>
+                            <dd className="col-sm-9">{address.state || 'Not specified'}</dd>
 
-                            <dt className="col-sm-3">Страна</dt>
+                            <dt className="col-sm-3">Country</dt>
                             <dd className="col-sm-9">{address.country}</dd>
 
-                            <dt className="col-sm-3">Почтовый индекс</dt>
+                            <dt className="col-sm-3">ZIP Code</dt>
                             <dd className="col-sm-9">{address.zipCode}</dd>
                           </dl>
                         </div>
@@ -558,35 +558,35 @@ const ProfilePage: React.FC = () => {
                   {/* Настройки */}
                   {user.preferences && (
                     <div className="mb-4">
-                      <h5 className="mb-3">Настройки</h5>
+                      <h5 className="mb-3">Settings</h5>
                       <dl className="row mb-0">
-                        <dt className="col-sm-3">Новостная рассылка</dt>
+                        <dt className="col-sm-3">Newsletter</dt>
                         <dd className="col-sm-9">
                           {user.preferences.newsletter ? (
                             <span className="text-success">
                               <i className="bi bi-check-circle me-1"></i>
-                              Подключена
+                              Subscribed
                             </span>
                           ) : (
                             <span className="text-muted">
                               <i className="bi bi-x-circle me-1"></i>
-                              Отключена
+                              Not subscribed
                             </span>
                           )}
                         </dd>
 
-                        <dt className="col-sm-3">Уведомления</dt>
+                        <dt className="col-sm-3">Notifications</dt>
                         <dd className="col-sm-9">
                           <div>
                             Email: {user.preferences.notifications.email ? (
                               <span className="text-success">
                                 <i className="bi bi-check-circle me-1"></i>
-                                Включены
+                                Enabled
                               </span>
                             ) : (
                               <span className="text-muted">
                                 <i className="bi bi-x-circle me-1"></i>
-                                Отключены
+                                Disabled
                               </span>
                             )}
                           </div>
@@ -594,12 +594,12 @@ const ProfilePage: React.FC = () => {
                             Push: {user.preferences.notifications.push ? (
                               <span className="text-success">
                                 <i className="bi bi-check-circle me-1"></i>
-                                Включены
+                                Enabled
                               </span>
                             ) : (
                               <span className="text-muted">
                                 <i className="bi bi-x-circle me-1"></i>
-                                Отключены
+                                Disabled
                               </span>
                             )}
                           </div>

@@ -1,66 +1,84 @@
 import React from 'react';
-import { PASSWORD_REQUIREMENTS, PASSWORD_PATTERN } from '../types/auth';
 
 interface PasswordStrengthIndicatorProps {
   password: string;
 }
 
 const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({ password }) => {
-  const getRequirementMet = (requirement: string): boolean => {
-    switch (requirement) {
-      case 'Минимум 8 символов':
-        return password.length >= 8;
-      case 'Хотя бы одна заглавная буква':
-        return /[A-Z]/.test(password);
-      case 'Хотя бы одна строчная буква':
-        return /[a-z]/.test(password);
-      case 'Хотя бы одна цифра':
-        return /\d/.test(password);
-      case 'Хотя бы один специальный символ (@$!%*?&)':
-        return /[@$!%*?&]/.test(password);
-      default:
-        return false;
+  const getPasswordStrength = (password: string): {
+    score: number;
+    label: string;
+    color: string;
+    requirements: { text: string; met: boolean }[];
+  } => {
+    const requirements = [
+      { text: 'At least 8 characters', met: password.length >= 8 },
+      { text: 'At least one uppercase letter', met: /[A-Z]/.test(password) },
+      { text: 'At least one lowercase letter', met: /[a-z]/.test(password) },
+      { text: 'At least one number', met: /\d/.test(password) },
+      { text: 'At least one special character', met: /[!@#$%^&*(),.?":{}|<>]/.test(password) },
+    ];
+
+    const metRequirements = requirements.filter(req => req.met).length;
+    
+    let score = 0;
+    let label = 'Very Weak';
+    let color = 'danger';
+
+    if (metRequirements >= 5) {
+      score = 100;
+      label = 'Very Strong';
+      color = 'success';
+    } else if (metRequirements >= 4) {
+      score = 80;
+      label = 'Strong';
+      color = 'success';
+    } else if (metRequirements >= 3) {
+      score = 60;
+      label = 'Medium';
+      color = 'warning';
+    } else if (metRequirements >= 2) {
+      score = 40;
+      label = 'Weak';
+      color = 'danger';
+    } else if (metRequirements >= 1) {
+      score = 20;
+      label = 'Very Weak';
+      color = 'danger';
     }
+
+    return { score, label, color, requirements };
   };
 
-  const getStrengthPercentage = (): number => {
-    if (!password) return 0;
-    return (PASSWORD_REQUIREMENTS.filter(req => getRequirementMet(req)).length / PASSWORD_REQUIREMENTS.length) * 100;
-  };
+  if (!password) return null;
 
-  const getStrengthColor = (): string => {
-    const strength = getStrengthPercentage();
-    if (strength <= 20) return 'bg-danger';
-    if (strength <= 40) return 'bg-warning';
-    if (strength <= 60) return 'bg-info';
-    if (strength <= 80) return 'bg-primary';
-    return 'bg-success';
-  };
+  const strength = getPasswordStrength(password);
 
   return (
-    <div className="password-strength-indicator mt-2">
-      <div className="progress" style={{ height: '4px' }}>
+    <div className="mt-2">
+      <div className="d-flex justify-content-between align-items-center mb-1">
+        <small className="text-muted">Password Strength:</small>
+        <small className={`text-${strength.color} fw-bold`}>{strength.label}</small>
+      </div>
+      
+      <div className="progress mb-2" style={{ height: '4px' }}>
         <div
-          className={`progress-bar ${getStrengthColor()}`}
+          className={`progress-bar bg-${strength.color}`}
           role="progressbar"
-          style={{ width: `${getStrengthPercentage()}%` }}
-          aria-valuenow={getStrengthPercentage()}
+          style={{ width: `${strength.score}%` }}
+          aria-valuenow={strength.score}
           aria-valuemin={0}
           aria-valuemax={100}
         />
       </div>
-      <div className="mt-2">
-        <small className="text-muted">Требования к паролю:</small>
-        <ul className="list-unstyled mt-1 mb-0">
-          {PASSWORD_REQUIREMENTS.map((requirement, index) => (
-            <li key={index} className="d-flex align-items-center">
-              <i className={`bi bi-${getRequirementMet(requirement) ? 'check-circle-fill text-success' : 'circle text-muted'} me-2`} />
-              <small className={getRequirementMet(requirement) ? 'text-success' : 'text-muted'}>
-                {requirement}
-              </small>
-            </li>
-          ))}
-        </ul>
+
+      <div className="small text-muted">
+        {strength.requirements.map((req, index) => (
+          <div key={index} className="d-flex align-items-center">
+            <i className={`bi ${req.met ? 'bi-check-circle text-success' : 'bi-x-circle text-danger'} me-2`} />
+            <span className={req.met ? 'text-success' : ''}>{req.text}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

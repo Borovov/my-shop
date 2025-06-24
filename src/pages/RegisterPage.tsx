@@ -23,25 +23,25 @@ const RegisterPage: React.FC = () => {
     const newErrors: ValidationErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Имя обязательно';
+      newErrors.name = 'Name is required';
     }
 
     if (!formData.email) {
-      newErrors.email = 'Email обязателен';
+      newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Некорректный email адрес';
+      newErrors.email = 'Invalid email address';
     }
 
     if (!formData.password) {
-      newErrors.password = 'Пароль обязателен';
+      newErrors.password = 'Password is required';
     } else if (!PASSWORD_PATTERN.test(formData.password)) {
-      newErrors.password = 'Пароль не соответствует требованиям';
+      newErrors.password = 'Password does not meet requirements';
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Подтверждение пароля обязательно';
+      newErrors.confirmPassword = 'Password confirmation is required';
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Пароли не совпадают';
+      newErrors.confirmPassword = 'Passwords do not match';
     }
 
     setErrors(newErrors);
@@ -56,11 +56,11 @@ const RegisterPage: React.FC = () => {
     setIsLoading(true);
     try {
       await register(formData);
-      setToast({ message: 'Регистрация успешна! Выполняется вход...', type: 'success' });
+      setToast({ message: 'Registration successful! Logging in...', type: 'success' });
       setTimeout(() => navigate('/'), 1500); // Redirect after showing success message
     } catch (error) {
       setToast({ 
-        message: error instanceof Error ? error.message : 'Ошибка регистрации', 
+        message: error instanceof Error ? error.message : 'Registration error', 
         type: 'error' 
       });
     } finally {
@@ -83,10 +83,10 @@ const RegisterPage: React.FC = () => {
         <div className="col-12 col-md-8 col-lg-6">
           <div className="card shadow-sm">
             <div className="card-body p-4">
-              <h1 className="text-center mb-4">Регистрация</h1>
+              <h1 className="text-center mb-4">Sign Up</h1>
               <form onSubmit={handleSubmit} noValidate>
                 <div className="mb-3">
-                  <label htmlFor="name" className="form-label">Имя</label>
+                  <label htmlFor="name" className="form-label">Name</label>
                   <input
                     type="text"
                     className={`form-control ${errors.name ? 'is-invalid' : ''}`}
@@ -120,7 +120,7 @@ const RegisterPage: React.FC = () => {
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Пароль</label>
+                  <label htmlFor="password" className="form-label">Password</label>
                   <input
                     type="password"
                     className={`form-control ${errors.password ? 'is-invalid' : ''}`}
@@ -138,7 +138,7 @@ const RegisterPage: React.FC = () => {
                 </div>
 
                 <div className="mb-4">
-                  <label htmlFor="confirmPassword" className="form-label">Подтверждение пароля</label>
+                  <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
                   <input
                     type="password"
                     className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
@@ -162,18 +162,18 @@ const RegisterPage: React.FC = () => {
                   {isLoading ? (
                     <>
                       <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                      Регистрация...
+                      Signing up...
                     </>
                   ) : (
-                    'Зарегистрироваться'
+                    'Sign Up'
                   )}
                 </button>
 
                 <div className="text-center">
                   <p className="mb-0">
-                    Уже есть аккаунт? {' '}
+                    Already have an account? {' '}
                     <Link to="/login" className="text-primary text-decoration-none">
-                      Войти
+                      Log in
                     </Link>
                   </p>
                 </div>

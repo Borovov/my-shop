@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         email: data.email,
         role: 'user',
         phone: '+1234567890',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Maxim',
         addresses: [
           generateMockAddress('1', true),
           {
@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(mockUser));
     } catch (error) {
       console.error('Login error:', error);
-      throw new Error('Неверный email или пароль');
+      throw new Error('Invalid email or password');
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +112,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(mockUser));
     } catch (error) {
       console.error('Registration error:', error);
-      throw new Error('Ошибка при регистрации. Возможно, email уже занят.');
+      throw new Error('Registration failed. Email may already be taken.');
     } finally {
       setIsLoading(false);
     }
@@ -126,7 +126,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.removeItem('user');
     } catch (error) {
       console.error('Logout error:', error);
-      throw new Error('Ошибка при выходе');
+      throw new Error('Logout failed');
     } finally {
       setIsLoading(false);
     }
@@ -166,7 +166,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error) {
       console.error('Profile update error:', error);
-      throw new Error('Ошибка при обновлении профиля');
+      throw new Error('Failed to update profile');
     } finally {
       setIsLoading(false);
     }
